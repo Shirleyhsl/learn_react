@@ -11,9 +11,15 @@ module.exports = {
    
     module: {
         rules: [{ //配置babel转换ES6高级语法
-            test: /\.js$/,
+            test: /\.js|jsx$/,
             use: 'babel-loader',
             exclude: /node_modules/
         }, ]
+    },
+    resolve:{
+        extensions:['.js','jsx','json'],
+        alias:{
+            '@':path.join(__dirname,'./src'),
+        }
     }
 }

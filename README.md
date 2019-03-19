@@ -147,7 +147,7 @@ ReactDOM.render(
 1. 父组件向子组件传递数据
 2. 使用{...obj}属性扩展传递数据，可以将一个对象的所有的属性传过去
 3. 将组件封装到单独的文件中
-4. 注意：组件的名称必须大写
+4. 注意：组件的名称首字母必须大写
 ```js
 import React from 'react'
 import ReactDOM from 'react-dom'
@@ -163,3 +163,66 @@ ReactDOM.render(<Hello {...dog}></Hello>, document.getElementById('app')) ;
 
 * 第2种 创建组件的方式
 >使用class关键字来创建组件
+1. 基本的组件结构
+```js
+//在组件内部必须有render函数
+class 组件名称 extends React.Component{
+    //render函数渲染虚拟的DOM节点
+    render(){
+        return <div>这是class创建的组件</div>
+    }
+}
+```
+2. 完整的写法
+```js
+import React from 'react'
+import ReactDOM from 'react-dom'
+
+class Movie extends React.Component {
+    render() {
+        return <div> 这是class创建的组件--{this.props.name} ----{this.props.type}</div>
+    }
+}
+
+const movie={
+    name:'1988',
+    type:'warm'
+}
+
+ReactDOM.render(<Movie {...movie}></Movie>, document.getElementById('app')) ;
+```
+## 两种创建组件方式的对比
+>注意：使用class关键字创建的组件，有自己的私有数据和生命周期函数，但是使用function创建的组件，只有props,没有自己的私有数据和生命周期函数
+1. 用构造函数创造出来的组件，叫做"无状态组件"
+2. 用class关键字创建出来的组件叫做“有状态组件”
+3. 什么情况下使用有状态组件？什么情况下使用无状态组件？
+* 如果一个组件需要自己的私有属性就使用有状态组件，否则使用无状态组件
+> 有状态组件和无状态组件之间的区别就是：有无state属性
+
+## 抽离组件为单独的.jsx文件
+* 创建Hello.jsx
+```js
+import React from 'react'
+export default function Hello(props) {
+    return <div>这是一个Hello组件----{props.name}</div> 
+}
+```
+* 在index.js中导入
+```js
+import Hello from './components/Hello.jsx'
+```
+
+## 如何在导入组件时省略后缀名以及如何在导入时使用@表示某个路径
+* 在webpack.config.js中可以配置参数
+```js
+resolve:{
+    extensions:['.js','jsx','json'],
+    alias:{
+        '@':path.join(__dirname,'./src'),
+     }
+}
+
+// 导入时
+import Hello from '@/components/Hello'
+```
+
