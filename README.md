@@ -1,68 +1,165 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# 这是react的视频学习记录
+* 视频来源 bilibili 的黑马程序员课程 [最全的react技术视频教程](https://www.bilibili.com/video/av37668737/)
 
-## Available Scripts
+## DAY1 基本配置
+* 创建基本的webpack4.x环境
+    * 使用`npm init`初始化
+    * 在根目录下创建`src`，`index.js` `index.html`文件夹及文件
+    * 安装webpack，运行`npm i webpack -g` ,  `npm i webpack --save`, `npm i webpack-cli --save`
+    * 在webpack4.x中，提供了约定大于配置的概念，目的是为了尽量减少配置文件的体积：默认约定了
+        * 打包的入口文件`src`->`index.js`
+        * 打包的输出文件`dist`->`main.js`
+        * 4.x中新增了`mode`选项，可选值为`development`、`production`
+        * 因此就不需要配置打包入口文件。此时使用命令`webpack`就可以进行打包
+    * 创建webpack.config.js
+    ```js
+    module.exports = {
+        mode:'development'
+    }
+    ```
+    * 安装`dev-server`,使项目可以自动打包更新， 运行`npm i webpack-dev-server --save`
+        * 配置`package.json`:`dev":"webpack-dev-server --open --port 3000 --hot`
+        * 打包生成的main.js在根目录下，但是托管在内存中，不在磁盘上
+    * 将`index.html`放置到内存中(加快访问，减少对物理磁盘的访问，降低损坏)
+        * 安装`html-webpack-plugin`,`npm i html-webpack-plugin --save`
+        * 配置`webpack.config.js`的相关参数
+        ```js
+            const path = require('path')
+            const HtmlWebPackPlugin = require('html-webpack-plugin');
 
-In the project directory, you can run:
+            const htmlPlugin = new HtmlWebPackPlugin({
+                template: path.join(__dirname,'./src/index.html'),   //源文件
+                filename:'index.html'   //生成内存中的首页名称
+            })
+            module.exports = {
+                mode:'development',
+                plugins: [htmlPlugin]
+            }
+        ```
+* 在项目中使用`react`
+    * 安装`react`相关的安装包 运行`cnpm i react react-dom --save`
+        * `react` 专门用于创建组件和虚拟DOM的，同时组件的生命周期都在这个包中
+        * `react-dom` 专门进行DOM操作的，最主要的应用场景，就是`ReactDOM.render()`;
 
-### `npm start`
+## react最基本的代码(创建虚拟节点-->渲染虚拟节点)
+```js
+//这两个导入的时候，接收成员的名字必须这么写
+import React from 'react'
+import ReactDOM from 'react-dom'
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+/**创建虚拟节点
+ * 参数1： 创建的元素类型，字符串，表示元素的名称
+ * 参数2：是一个对象或者null，表示这个DOM元素的属性
+ * 参数3：子节点(包括其它虚拟DOM 获取文本子节点)
+ * 参数n：其它子节点
+ */
+// const myh1= React.createElement('h1',null,'这是h1');
+const myh1 = React.createElement('h1', {id:'myh1',title:'this is a h1'}, '这是h1');
+/**
+ * 使用ReactDOM把虚拟DOM渲染到页面
+ * 参数1：要渲染的虚拟元素
+ * 参数2：指定页面的一个容器,是一个DOM元素
+ */
+ReactDOM.render(myh1,document.getElementById('app'));
+```
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+## JSX
+>s什么是JSX语法：符合xml规范的JS语法（语法格式相对来说，要比HTML严谨很多）
+1. 如何启动JSX语法?
+    * 安装`babel`插件
+        * 运行 `cnpm i babel-core babel-loader babel-plugin-transform-runtime --save`
+        * 运行`cnpm i babel-preset-env babel-preset-stage-0 --save`
+    * 安装能够识别转换jsx语法的包 `babel-preset-react`
+        * 运行`cnpm i babel-preset-react --save`
+    * 加`package.json`的`module.exports`中配置规则
+    ```js
+        module:{
+            rules:[
+                {test:'/\.js|jsx$/',use:'babel-loader',exclude:/node_modules/}
+            ]
+        }
+    ```
+    * 添加.babel配置文件
+    ```js
+    {
+        "presets":["env","stage-0","react"],
+        "plugins":["transform-runtime"]
+    }
+    ```
 
-### `npm test`
+### 使用JSX语法的react基本写法
+```js
+/**
+ * 创建虚拟节点
+ * js不能写这种类似于heml的标记
+ * 这种在js中混合写入类似于html的语法， 叫做JSX语法
+ * jsx语法的本质还是运行的时候， 被转换成了React.CreatElement的方法执行
+ */
+const mydiv=<div id="mydiv" title="mydiv">这个一个div元素</div>
+ReactDOM.render(mydiv, document.getElementById('app'));
+```
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## JSX基本语法
+```js
+import React from 'react'
+import ReactDOM from 'react-dom'
 
-### `npm run build`
+let a=10
+let str="你好"
+let boo = false
+let title="122"
+const h1 = <h1>红红火火</h1>
+const arrStr= ['龙猫', '小丸子', '花轮']
+const nameArr=[]
+arrStr.forEach(item => {
+    const temp = <h5>{item}</h5>
+    nameArr.push(temp)
+});
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+ReactDOM.render(
+    <div>
+    {a+2}
+    <hr/>
+    {str}
+    <hr />
+    {boo?'真':'假'}
+    <hr />
+    <p title={title}>这是p标签</p>
+    <h1/>
+    {h1}
+    <hr/>
+    {nameArr},
+    <hr/>
+    {arrStr.map(item => {return <h5> {item} </h5>})}
+    </div>, 
+    document.getElementById('app')
+    );
+```
+* 在jsx中写注释：`/* 这是注释 */`
+* 为jsx中的元素添加class类名：需要使用`className`来代替`class`，`htmlFor`代替label中的`for`
+* 在jsx创建DOM的时候,所有的节点，必须有唯一的根元素进行包裹；
+* 在jsx语法中，标签必须成对出现，如果是单标签，则必须自闭和
+>在编译引擎，在编译JSX代码的时候，如果遇到了`<`那么就把它当做HTML代码去编译，如果遇到了`{}`就把花括号内部的代码当做普通JS代码去编译。
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+## React中创建组件
+* 第1种 创建组件的方式
+>使用构造函数来创建组件，如果要接收外界传递的数据，需要再构造函数的参数列表中使用`props`来接收；必须要向外return一个合法的JSX创建的虚拟DOM
+1. 父组件向子组件传递数据
+2. 使用{...obj}属性扩展传递数据，可以将一个对象的所有的属性传过去
+3. 将组件封装到单独的文件中
+4. 注意：组件的名称必须大写
+```js
+import React from 'react'
+import ReactDOM from 'react-dom'
+//第一种创建组件方法
+function Hello(props) {
+    return <div>这是一个Hello组件----{props.name}</div> 
+}
+const dog={ name:'大黄', age:3,}
+/*直接将组件名称以标签的形式，丢到页面*/
+//eactDOM.render(<Hello name={dog.name}></Hello>, document.getElementById('app')) ;
+ReactDOM.render(<Hello {...dog}></Hello>, document.getElementById('app')) ;
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+* 第2种 创建组件的方式
+>使用class关键字来创建组件

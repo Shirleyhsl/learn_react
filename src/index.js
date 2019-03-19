@@ -1,12 +1,17 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React from 'react'
+import ReactDOM from 'react-dom'
+//第一种创建组件方法
+//无论是vue还是react组件，props永远都是只读的，不能被重新赋值
+function Hello(props) {
+    return <div>这是一个Hello组件----{props.name}</div> 
+}
 
-ReactDOM.render(<App />, document.getElementById('root'));
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+const dog={
+    name:'大黄',
+    age:3,
+    gender:'熊'
+}
+/**
+ * 1.直接将组件名称以标签的形式，丢到页面
+ */
+ReactDOM.render(<Hello {...dog}></Hello>, document.getElementById('app')) ;
