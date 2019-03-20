@@ -359,7 +359,7 @@ import Hello from '@/components/Hello'
     onClick={function}
 ```
 3. 用的最多的事件绑定形式为：
-    ```js
+    ```html
     <button onClick={()=>this.show('传参')}">按钮</button>
 
     //事件的处理函数，需要定义为一个箭头函数，然后赋值给函数名称
