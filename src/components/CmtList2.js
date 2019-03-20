@@ -1,5 +1,6 @@
 import React from 'react'
 import CmtItem from '@/components/CmtItem2.jsx'
+
 import cssobj from '@/css/cmtList.scss'
 import 'bootstrap/dist/css/bootstrap.css'
 export default class CmtList extends React.Component {

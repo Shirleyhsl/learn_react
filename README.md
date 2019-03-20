@@ -352,3 +352,47 @@ import Hello from '@/components/Hello'
     * 规定自己的文件只能是除css之外的格式，如scss，第三方文件以.css结尾
     * 根据这个规则安装scss模块，修改之前的匹配规则
 
+## React中的绑定事件
+1. 事件的名称是React提供的，因此名称的首字母必须大写`onclick`,`onMouseOver`
+2. 为事件提供处理函数，必须是如下格式
+```js
+    onClick={function}
+```
+3. 用的最多的事件绑定形式为：
+    ```js
+    <button onClick={()=>this.show('传参')}">按钮</button>
+
+    //事件的处理函数，需要定义为一个箭头函数，然后赋值给函数名称
+    show = (arg1)=> {
+        console.log('show方法'+arg1);
+    }
+    ```
+4. 在React中，如果要修改state中的数据，推荐使用`this.setState({})`
+>注意this.setState({})是异步的，如果想要执行完修改后再执行某些事件，需要写在第二参数（回调函数）中
+5. 双向绑定
+    * 在默认情况下，如果页面的表单元素绑定了state的状态值，那么，每当state中的数据发生变化时，数据就会自动同步到页面上，也就是表单的数据就会自动同步。
+    * 如果表单元素发生了变化，想要把最新的值同步到state中，React中是没有这种同步机制的。在React中，需要程序员手动监听文本框的onChange事件，在onChange事件中拿到最新的文本框的值，手动同步到state中
+    * 获取Dom元素的方式
+        * 获取当前事件的元素 通过事件参数e来获取
+        `onChange={(e)=>this.textChange(e)}`
+        `textChange=(e)=>{this.setState({msg:e.target.value})}`
+        * 获取页面任意元素 通过ref获取
+         为页面元素绑定ref="***"
+         通过`this.refs.***`来获取DOM元素
+         >定义ref的时候报错了，没找到原因。没查出原因o(╥﹏╥)o
+
+## 组件的生命周期
+* 每个组件实例从创建、运行到销毁会发生一系列事件，这些事件就叫做组件的生命周期函数
+* React组件的生命周期分为3个部分
+    * 组件创建阶段：特点：一辈子只执行一次
+        componentWillMount
+        render
+        componentDidMount
+    * 组件运行阶段：按需、根据props属性或state状态的改变、有选择性的执行0至多次
+        componentWillReceiveProps
+        shouldComponentUpdate
+        componentWillUpdate
+        render
+        componentDidUpdate
+    * 组件销毁阶段：一辈子只执行一次
+        componentWillUnmount
