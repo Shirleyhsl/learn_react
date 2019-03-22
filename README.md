@@ -1,5 +1,7 @@
 # 这是react的视频学习记录
-* 视频来源 bilibili 的黑马程序员课程 [最全的react技术视频教程](https://www.bilibili.com/video/av37668737/)
+* 视频来源1 bilibili 的黑马程序员课程 [最全的react技术视频教程](https://www.bilibili.com/video/av37668737/)
+* 视频来源2 bilibili[尚硅谷React全家桶视频](https://www.bilibili.com/watchlater/#/av22504834)
+
 1. `git clone https://github.com/Shirleyhsl/learn_react`
 2. `npm install`
 3. `npm run dev`
@@ -151,6 +153,11 @@ ReactDOM.render(
 2. 使用{...obj}属性扩展传递数据，可以将一个对象的所有的属性传过去
 3. 将组件封装到单独的文件中
 4. 注意：组件的名称首字母必须大写
+5. 定义组件的默认值 `组件名.defaultProps={age:18}`
+6. 对props中的属性值进行类型限制和必要性限制 
+    * 引入prop-type的包 `cnpm i --save prop-type`
+    * `组件名.propTypes={age:React.PropTypes.number.isRequired}`
+
 ```js
 import React from 'react'
 import ReactDOM from 'react-dom'
